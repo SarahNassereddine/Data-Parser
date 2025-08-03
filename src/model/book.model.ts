@@ -35,5 +35,7 @@ export class Book implements IItem{
     getPackaging(): string{
         return this.packaging;
     }
-
+     getAuthor(): string{
+        return this.author;
+    }
 }
