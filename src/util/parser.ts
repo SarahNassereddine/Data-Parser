@@ -1,7 +1,7 @@
-import logger from "./util/logger";
-import { parseCSV } from "./parsers/csvParser";
-import { parseXml } from "./parsers/xmlParser";
-import { parseJSON } from "./parsers/jsonParser";
+import logger from "./logger";
+import { parseCSV } from "../parsers/csvParser";
+import { parseXml } from "../parsers/xmlParser";
+import { parseJSON } from "../parsers/jsonParser";
 import path from "path";
 
 const csvFilePath = path.join(__dirname, "data", "cake orders.csv");
@@ -97,3 +97,4 @@ const parsedXml= await parseXml(xmlFilePath);
 logXmlOrders(parsedXml);
 
 logger.info("congrats! finished parsing.");}
+runParsers();
