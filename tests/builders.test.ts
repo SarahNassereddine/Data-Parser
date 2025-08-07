@@ -1,18 +1,10 @@
 import {CakeBuilder} from "../src/model/builders/Cake.builder";
 import{BookBuilder} from  "../src/model/builders/Book.builder";
 import{ToyBuilder} from "../src/model/builders/Toy.builder";
-    let cakeBuilder: CakeBuilder;
-    let bookBuilder: BookBuilder;
-    let toyBuilder: ToyBuilder;
-//before *each* to have an object to test withoout any previous modifications
-beforeEach(()=>{
-    cakeBuilder=new CakeBuilder();
-    bookBuilder=new BookBuilder();
-    toyBuilder=new ToyBuilder();
-    
-})
+
 describe("testing CakeBuilder..", ()=>{
     it("should build a cake",()=>{
+        const cakeBuilder=new CakeBuilder();
         const cake=cakeBuilder.setType("type") 
                .setFlavor("flavor")
                .setFilling("filling")
@@ -47,6 +39,7 @@ describe("testing CakeBuilder..", ()=>{
     });
     it("should throw an error if missing properties",()=>{
         expect(()=>{
+            const cakeBuilder=new CakeBuilder();
             cakeBuilder.setType("type") 
                .setFlavor("flavor")
                .setFilling("filling")
@@ -58,7 +51,7 @@ describe("testing CakeBuilder..", ()=>{
 
 describe("testing BookBuilder..",()=>{
     it("should build a book",()=>{
-   
+    const bookBuilder=new BookBuilder();
     const book=bookBuilder.setAuthor("author")
                .setBookTitle("book title")
                .setFormat("format")
@@ -81,6 +74,7 @@ describe("testing BookBuilder..",()=>{
     });
     it("should throw an error if missing properties",()=>{
         expect(()=>{
+            const bookBuilder=new BookBuilder();
             bookBuilder.setAuthor("author")
                .setBookTitle("book title")
                .setFormat("format")
@@ -92,6 +86,7 @@ describe("testing BookBuilder..",()=>{
 
 describe("testing ToyBuilder..",()=>{
     it("should build a toy",()=>{
+        const  toyBuilder=new ToyBuilder();
         const toy=toyBuilder.setAgeGroup("age")
               .setBatteryRequired("battery required")
               .setBrand("brand")
@@ -110,6 +105,7 @@ describe("testing ToyBuilder..",()=>{
     });
     it("should throw an error if missing properties",()=>{
         expect(()=>{
+            const toyBuilder=new ToyBuilder();
             toyBuilder.setAgeGroup("age")
               .setBatteryRequired("battery required")
               .setBrand("brand")
