@@ -5,6 +5,7 @@ import { createParserFile } from './UtilFunction';
 
 
 describe('CSV Parser: ', () => {
+    const dummyFilesDir = path.resolve(__dirname, './dummyCSVFiles');
     it('should parse CSV file correctly', async () => {
         const filePath = path.join(__dirname, '..',"..", 'src', 'data', 'Cake orders.csv'); 
         const data = await parseCSV(filePath);
@@ -15,7 +16,7 @@ describe('CSV Parser: ', () => {
     });
     it('should handle empty CSV file', async () => {
         // Create an empty CSV file for testing
-        const emptyCSVFilePath = await createParserFile('empty.csv', '');
+        const emptyCSVFilePath = await createParserFile(dummyFilesDir,'empty.csv', '');
         const data = await parseCSV(emptyCSVFilePath);
 
         expect(data).toBeDefined();
@@ -28,7 +29,7 @@ describe('CSV Parser: ', () => {
 
     it ('should handle spaces and empty lines', async () => {
         // Create a CSV file with spaces and empty lines
-        const spacesAndEmptyLinesFilePath = await createParserFile('spaces_and_empty_lines.csv', 'name,age\n\nJohn,30\n  \nJane,25\n'); // Create a CSV file with spaces and empty lines
+        const spacesAndEmptyLinesFilePath = await createParserFile(dummyFilesDir,'spaces_and_empty_lines.csv', 'name,age\n\nJohn,30\n  \nJane,25\n'); // Create a CSV file with spaces and empty lines
         const data = await parseCSV(spacesAndEmptyLinesFilePath);
 
         expect(data).toBeDefined();
@@ -36,7 +37,7 @@ describe('CSV Parser: ', () => {
     });
     it("should escape delimitters ',' if they are part of the content", async () => {
         // Create a CSV file with delimiter vs content
-        const delimiterVsContentFilePath = await createParserFile('delimiter_vs_content.csv', 'name,  age, "sarah, ss",20'); // Create a CSV file with delimiter vs content
+        const delimiterVsContentFilePath = await createParserFile(dummyFilesDir,'delimiter_vs_content.csv', 'name,  age, "sarah, ss",20'); // Create a CSV file with delimiter vs content
         const data = await parseCSV(delimiterVsContentFilePath);
 
         expect(data).toBeDefined();
@@ -44,7 +45,7 @@ describe('CSV Parser: ', () => {
     });
      afterAll(() => {
         // Clean up the directory containing dummy files creates during tests.
-        const dummyFilesDir = path.resolve(__dirname, './dummyCSVFiles');
+        
         if (fs.existsSync(dummyFilesDir)) {
             fs.rmSync(dummyFilesDir, { recursive: true, force: true });
         }});

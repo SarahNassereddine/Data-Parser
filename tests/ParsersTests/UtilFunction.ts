@@ -1,24 +1,27 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-const DUMMY_FILES_DIR = path.resolve(__dirname, './dummyFiles');
-
 /**
- * Creates a file with the given name and content in the dummyFiles folder.
+ * Creates a file with the given name and content in the specified folder.
+ * @param folder The folder to create the file in.
  * @param fileName Name of the file to create.
  * @param content Content to write to the file.
  * @returns The full path of the created file.
  */
-export async function createParserFile(fileName: string, content: string): Promise<string> {
-    const filePath = path.join(DUMMY_FILES_DIR, fileName);
-    await fs.mkdir(DUMMY_FILES_DIR, { recursive: true });
+export async function createParserFile(folder: string, fileName: string, content: string): Promise<string> {
+    const folderPath = path.resolve(__dirname, folder);
+    await fs.mkdir(folderPath, { recursive: true });
+
+    const filePath = path.join(folderPath, fileName);
+
     try {
         await fs.access(filePath);
-        // File exists, do not create again
+        // File exists, return path
         return filePath;
-    } catch (err) {
-        // File does not exist, continue to create
+    } catch {
+        // File does not exist, create it
     }
+
     await fs.writeFile(filePath, content, 'utf8');
     return filePath;
 }

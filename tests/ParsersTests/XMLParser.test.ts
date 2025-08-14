@@ -4,6 +4,7 @@ import path from 'path';
 import { createParserFile } from './UtilFunction';
 
 describe("XML parser:", () => {
+    const dummyFilesDir = path.resolve(__dirname, './dummyXMLFiles');
     it("should parse XML file correctly", async () => {
         const filePath = path.join(__dirname, "..", "..", "src", "data", "toy orders.xml");
         const fileData = await parseXml(filePath);
@@ -17,7 +18,7 @@ describe("XML parser:", () => {
 
     it("should handle empty XML file", async () => {
         // Create an empty XML file for testing
-        const emptyXmlFilePath = await createParserFile('empty.xml', '');
+        const emptyXmlFilePath = await createParserFile(dummyFilesDir,'empty.xml', '');
         const data = await parseXml(emptyXmlFilePath);
 
         expect(data).toBeDefined();
@@ -31,12 +32,11 @@ describe("XML parser:", () => {
 
     it("should handle malformed XML data", async () => {
         // Create a malformed XML file for testing
-        const malformedXmlFilePath = await createParserFile('malformed.xml', '<toyOrders><order><id>1</id><name>Test Toy</name></order>');
+        const malformedXmlFilePath = await createParserFile(dummyFilesDir,'malformed.xml', '<toyOrders><order><id>1</id><name>Test Toy</name></order>');
         await expect(parseXml(malformedXmlFilePath)).rejects.toThrow(); // Expect an error to be thrown for malformed data
     });
     afterAll(() => {
         // Clean up the directory containing dummy files creates during tests.
-        const dummyFilesDir = path.resolve(__dirname, './dummyXMLFiles');
         if (fs.existsSync(dummyFilesDir)) {
             fs.rmSync(dummyFilesDir, { recursive: true, force: true });
         }});
