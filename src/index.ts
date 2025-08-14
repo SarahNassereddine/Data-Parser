@@ -97,4 +97,3 @@ const parsedXml= await parseXml(xmlFilePath);
 logXmlOrders(parsedXml);
 
 logger.info("congrats! finished parsing.");}
-runParsers();
