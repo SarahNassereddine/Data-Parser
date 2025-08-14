@@ -1,8 +1,0 @@
-[33mcommit 793ae74392f4c8931b353d0d46e1cbc70e183fcd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmy-feature[m[33m, [m[1;31morigin/my-feature[m[33m)[m
-Author: Sarah Nassereddine <sarah.nassereddine23@gmail.com>
-Date:   Sat Aug 2 10:56:59 2025 +0300
-
-    add parsers,tests and logs
-
- src/parsers/xmlParser.ts | 3 [32m++[m[31m-[m
- 1 file changed, 2 insertions(+), 1 deletion(-)
