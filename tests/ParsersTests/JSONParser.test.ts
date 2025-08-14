@@ -1,7 +1,7 @@
 import { parseJSON } from '../../src/parsers/jsonParser';
 import fs from 'fs';
 import path from 'path';
-import { createParserFile } from './UtilFunctions';
+import { createParserFile } from './UtilFunction';
 
 describe("json parser:", ()=>{
     it('should parse json file correctly', async () => {

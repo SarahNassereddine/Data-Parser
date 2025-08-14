@@ -1,7 +1,7 @@
 import { parseXml } from '../../src/parsers/xmlParser';
 import fs from 'fs';
 import path from 'path';
-import { createParserFile } from './UtilFunctions';
+import { createParserFile } from './UtilFunction';
 
 describe("XML parser:", () => {
     it("should parse XML file correctly", async () => {

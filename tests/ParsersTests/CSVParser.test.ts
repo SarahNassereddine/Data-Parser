@@ -1,7 +1,7 @@
 import { parseCSV } from '../../src/parsers/csvParser';
 import fs from 'fs';
 import path from 'path';
-import { createParserFile } from './UtilFunctions';
+import { createParserFile } from './UtilFunction';
 
 
 describe('CSV Parser: ', () => {
