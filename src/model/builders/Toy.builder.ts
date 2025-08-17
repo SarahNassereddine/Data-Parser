@@ -1,4 +1,4 @@
-import logger from "../../util/logger";
+import logger from "../../logger/logger";
 import {Toy} from "../toy.model";
 
 export class ToyBuilder{
@@ -8,6 +8,9 @@ export class ToyBuilder{
         private material!: string;
         private batteryRequired!: string;
         private educational! : string;
+        public static newBuilder(): ToyBuilder {
+        return new ToyBuilder();
+    }
     setType(type: string): ToyBuilder {
         this.type = type;
         return this;

@@ -7,4 +7,10 @@ export default{
     //SECRET:process.env.secret || 'default secret'
     logDir: process.env.LOGS_DIR || "./logs",
     isDev: process.env.NODE_ENV === "development", // if I am in development 
+    storagePath:{
+        csv:{
+            cake:'src/data/cake orders.csv'
+        }
+    }
+
 }

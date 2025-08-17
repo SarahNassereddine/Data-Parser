@@ -18,4 +18,3 @@ export async function parseJSON<T = any>(filePath: string): Promise<T> {
     }
 
 }
-

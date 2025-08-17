@@ -1,4 +1,4 @@
-import logger from "../../util/logger";
+import logger from "../../logger/logger";
 import { Cake } from "../cake.model";
 
 export class CakeBuilder {
@@ -15,9 +15,13 @@ export class CakeBuilder {
     private customMessage!: string;
     private shape!: string;
     private allergies!: string;
-    private specialIngredients!:string;
+    private specialIngredients!:string; 
     private packagingType!:string;
 
+
+    public static newBuilder(): CakeBuilder {
+        return new CakeBuilder();
+    }
     setType(type: string): CakeBuilder {
         this.type = type;
         return this;

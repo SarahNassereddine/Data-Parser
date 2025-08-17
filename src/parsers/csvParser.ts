@@ -1,5 +1,7 @@
 import fs from 'fs';
+import fsp from 'fs/promises';  // writeFile
 import { parse } from 'csv-parse';
+import { stringify as csvStringify } from "csv-stringify";
 
 
 export async function parseCSV (filePath: string): Promise<string[][]> {
@@ -24,3 +26,17 @@ export async function parseCSV (filePath: string): Promise<string[][]> {
     });
   }
 
+export async function writeCSVFile(filePath: string, data: string[][]): Promise<void> {
+    try {
+        const csvContent = await new Promise<string>((resolve, reject) => {
+            csvStringify(data, (err, output) => {
+                if (err) return reject(err);
+                resolve(output);
+            });
+        });
+
+        await fsp.writeFile(filePath, csvContent, 'utf-8');
+    } catch (error) {
+        throw new Error(`Error writing CSV file: ${error}`);
+    }
+}

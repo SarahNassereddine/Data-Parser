@@ -1,4 +1,4 @@
-import logger from "../../util/logger";
+import logger from "../../logger/logger";
 import { Book } from "../book.model";
 
 export class BookBuilder{
@@ -7,9 +7,14 @@ export class BookBuilder{
         private genre!: string;
         private format!: string;
         private language!: string;
-        private publisher!: string;
+        private publisher!: string; 
         private specialEdition!: string;
         private packaging!: string;
+    
+    public static newBuilder(): BookBuilder {
+        return new BookBuilder();
+    }
+
     setBookTitle(title: string): BookBuilder {
         this.bookTitle = title;
         return this;
