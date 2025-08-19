@@ -23,7 +23,6 @@ describe("CSVakeMapper", () => {
                 .setDecorationType("Sprinkles")
                 .setDecorationColor("Multi-color")
                 .setCustomMessage("Happy Birthday")
-                .setShape("Round")
                 .setSpecialIngredients("Organic Ingredients")
                 .setShape("Round")
                 .setAllergies("Nut-Free"    )
@@ -33,14 +32,12 @@ describe("CSVakeMapper", () => {
             expect(mapper.map(csvData)).toEqual(expectedCake);
         });
 
-        it("should throw an error for missing properties",()=>{
-            const incompleteData = ["Sponge","Vanilla","Cream","20"];
-                    // missing Layers, FrostingType, FrostingFlavor..
-            
-            expect(() => mapper.map(incompleteData)).toThrow();
-        });
           it('should throw an error for empty CSV', () => {
             expect(() => mapper.map([])).toThrow();
+        });
+        it('should throw an error for incomplete CSV', () => {
+            const incompleteData = ["Sponge","Vanilla","Cream","20"];
+            expect(() => mapper.map(incompleteData)).toThrow();
         });
     });
 

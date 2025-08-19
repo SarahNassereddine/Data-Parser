@@ -33,9 +33,8 @@ describe('JSONBookMapper', () => {
         expect(mapper.map(jsonData)).toEqual(expectedJSData);
     });
 
-    it('should throw an error for missing optional fields', () => {
+    it('should throw an error if missing properties', () => {
         const jsonData = {
-        "Book Title": "Edge of Eternity",
         "Author": "Dan Brown",
         "Genre": "Science Fiction",
         "Format": "Paperback",
@@ -59,7 +58,7 @@ describe('JSONBookMapper', () => {
         .setSpecialEdition("Signed Copy")
         .setPackaging("Eco-Friendly Packaging")
         .build();
-
+ 
 
         const expectedJsonData = {
             "Book Title": "Edge of Eternity",

@@ -2,7 +2,7 @@ import { IItem, ItemCategory } from "./item.model";
 
 export class Book implements IItem{
     constructor(
-        private bookTitle: string ,
+        private bookTitle: string , 
         private author: string,
         private genre: string,
         private format: string,

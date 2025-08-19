@@ -66,7 +66,7 @@ export class BookBuilder{
         this.packaging
         ];
     for(const property of requiredProperties){
-         if(!property){
+         if(property===null || property===undefined){
                 logger.error("Missing required properties, could not build a book");
                 throw new Error("Missing requiered properties");
             }

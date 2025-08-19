@@ -8,7 +8,7 @@ export class ToyBuilder{
         private material!: string;
         private batteryRequired!: string;
         private educational! : string;
-        public static newBuilder(): ToyBuilder {
+    public static newBuilder(): ToyBuilder {
         return new ToyBuilder();
     }
     setType(type: string): ToyBuilder {
@@ -50,7 +50,7 @@ export class ToyBuilder{
         this.educational
         ];
     for(const property of requiredProperties){
-         if(!property){
+         if(property===null || property===undefined){
                 logger.error("Missing required properties, could not build a toy");
                 throw new Error("Missing requiered properties");
             }

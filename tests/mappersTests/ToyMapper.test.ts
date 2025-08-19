@@ -15,7 +15,7 @@ describe("XMLToyMapper",()=>{
                 BatteryRequired: "Yes",
                 Educational: "Yes"
             };
-            const toy = mapper.map(xmlData);
+            const toy = mapper.map(xmlData); 
             expect(toy).toBeDefined();
             expect(toy.getType()).toEqual("Plush Toy");
             expect(toy.getAgeGroup()).toEqual("13+");

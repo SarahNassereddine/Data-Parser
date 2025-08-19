@@ -15,10 +15,8 @@ export class CakeBuilder {
     private customMessage!: string;
     private shape!: string;
     private allergies!: string;
-    private specialIngredients!:string; 
+    private specialIngredients!:string;
     private packagingType!:string;
-
-
     public static newBuilder(): CakeBuilder {
         return new CakeBuilder();
     }
@@ -109,9 +107,9 @@ export class CakeBuilder {
             this.specialIngredients,
             this.packagingType];
         for(const property of requiredProperties){
-            if(!property){
+            if(property===null || property===undefined){
                 logger.error("Missing required properties, could not build a cake");
-                throw new Error("Missing requiered properties"); // mamnou3 yred null la property ->error
+                throw new Error("Missing required properties"); // mamnou3 yred null la property ->error
             }}
         return new Cake(this.type,
             this.flavor,

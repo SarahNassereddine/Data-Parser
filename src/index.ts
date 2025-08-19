@@ -1,26 +1,42 @@
 import { parseCSV } from "./parsers/csvParser";
-import { BookBuilder } from "./model/builders/Book.builder";
-
-import { ToyBuilder } from "./model/builders/Toy.builder";
 import { CSVCakeMapper } from "./mappers/Cake.mapper";
 import logger from "./logger/logger";
 import { CSVOrderMapper } from "./mappers/Order.mapper";
-import config from "./config";
-import { CakeOrderRepository } from "./repository/file/cakeOrder.repository";
+import { parseJSON } from "./parsers/jsonParser";
+import { JSONBookMapper } from "./mappers/Book.mapper";
+import { parseXml } from "./parsers/xmlParser";
+import { XMLToyMapper } from "./mappers/Toy.mapper";
 
 async function main(){
-    //before:
-    // const data=await parseCSV("src/data/cake orders.csv");
-    //const cakeMapper=new CSVCakeMapper();
-    //const orderMapper=new CSVOrderMapper(cakeMapper);
-    //const orders= data.map(row=>orderMapper.map(row));
-    //logger.info("list of orders: \n %o",orders);
+    const CSVallData=await parseCSV("src/data/cake orders.csv");
+    const data=CSVallData.slice(1);
+    const cakeMapper=new CSVCakeMapper();
+    const orderMapper=new CSVOrderMapper(cakeMapper);
+    const orders= data.map(row=>orderMapper.map(row));
+    logger.debug("list of orders: %o", orders);
+    logger.info({ message: "list of orders", orders });
+    logger.info("finished maping csv data");
 
-    const path=config.storagePath.csv.cake;
-    const repository=new CakeOrderRepository(path);
-    const data=await repository.get("14");
+    const JSONdata= await parseJSON("src/data/book orders.json");
+    const bookMapper=new JSONBookMapper();
+    const books = JSONdata.map((item: { [key: string]: string }) => bookMapper.map(item));
+    logger.debug("list of books: %o", books);
+    logger.info({ message: "list of books", books });
+    logger.info("finished mapping json data");
 
-    logger.info("list of orders: \n %o",data);
+    const XmlToyData = await parseXml("src/data/toy orders.xml");
+    const toyMapper = new XMLToyMapper();
+    const toys = XmlToyData.data.row.map((row: { [key: string]: string }) => {
+        const flatRow: { [key: string]: string } = {};
+        for (const key in row) {
+            flatRow[key] = row[key][0]; 
+        }
+        return toyMapper.map(flatRow);
+});
+    logger.debug("list of toys: %o", toys);
+    logger.info({ message: "list of toys", toys });
+    logger.info("Finished mapping XML toys");
+
 }
     
 main();
