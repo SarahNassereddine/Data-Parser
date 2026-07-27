@@ -46,7 +46,7 @@ export abstract class OrderRepository implements IRepository<IOrder>{
              throw new InvalidItemException("Order cannot be null");
         }
         const orders=await this.load();
-        const index=orders.findIndex(o=>{o.getId()===item.getId()});
+        const index=orders.findIndex(o=>o.getId()===item.getId());
         if(index===-1){
              logger.error("Failed to find order of id %s",item.getId());
             throw new ItemNotFoundException("Failed to find the element");

@@ -2,6 +2,17 @@ export type id= string;
 export interface ID {
     getId():id;
 }
+
+export interface initializable{
+/**
+ * * init - initializes the creation of required tables and establishes connections.
+ *
+ * @throws InitializationException - if the initialization fails.
+ * 
+ * @returns A promise that resolves when the initialization is complete.
+ */
+    init(): Promise<void>;
+}
 /**
  * Generic interface defining the standard CRUD operations for a repository.
  * @template T - The type of items managed by the repository, must extend ID.
@@ -11,6 +22,7 @@ export interface IRepository<T extends ID> {
      * Creates a new item in the repository.
      * @param item - The item to create.
      * @throws {InvalidItemException} if the item does not meet validity constraints.
+     * @throws {dbException} if there is an error during interaction with the database.
      * @returns A promise resolving to the ID of the newly created item.
      */
     create(item: T): Promise<id>; // why T? to avoid using any. T extends ID to be cont'd
@@ -25,6 +37,7 @@ export interface IRepository<T extends ID> {
 
     /**
      * Retrieves all items present in the repository.
+     * @throws {dbException} if there is an error during interaction with the database.
      * @returns A promise resolving to an array of all items.
      */
     getAll(): Promise<T[]>;
@@ -34,6 +47,7 @@ export interface IRepository<T extends ID> {
      * @param item - The item to update.
      * @throws {ItemNotFoundException} if the item to update does not exist.
      * @throws {InvalidItemException} if the updated item violates validity constraints.
+     * @throws {dbException} if there is an error during interaction with the database.
      * @returns A promise resolved once the update is complete.
      */
     update(item: T): Promise<void>;
@@ -42,8 +56,11 @@ export interface IRepository<T extends ID> {
      * Deletes an existing item from the repository.
      * @param item - The item to delete.
      * @throws {ItemNotFoundException} if the item to delete does not exist.
+     * @throws {dbException} if there is an error during interaction with the database.
      * @returns A promise resolved once the deletion is complete.
      */
     delete(id:string):Promise<void>;
 
 }
+
+export interface initializableRepository<T extends ID> extends IRepository<T>, initializable{}

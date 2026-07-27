@@ -1,42 +1,48 @@
-import { parseCSV } from "./parsers/csvParser";
-import { CSVCakeMapper } from "./mappers/Cake.mapper";
-import logger from "./logger/logger";
-import { CSVOrderMapper } from "./mappers/Order.mapper";
-import { parseJSON } from "./parsers/jsonParser";
-import { JSONBookMapper } from "./mappers/Book.mapper";
-import { parseXml } from "./parsers/xmlParser";
-import { XMLToyMapper } from "./mappers/Toy.mapper";
+import config from './config';
+import express from 'express';
+import logger from './logger/logger';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import requestLogger from './middleware/requestLogger';
+import routes from './routes';
+import { ApiException } from './repository/util/exceptions/ApiException';
+const app=express();
 
-async function main(){
-    const CSVallData=await parseCSV("src/data/cake orders.csv");
-    const data=CSVallData.slice(1);
-    const cakeMapper=new CSVCakeMapper();
-    const orderMapper=new CSVOrderMapper(cakeMapper);
-    const orders= data.map(row=>orderMapper.map(row));
-    logger.debug("list of orders: %o", orders);
-    logger.info({ message: "list of orders", orders });
-    logger.info("finished maping csv data");
+//config helmet
+app.use(helmet());
 
-    const JSONdata= await parseJSON("src/data/book orders.json");
-    const bookMapper=new JSONBookMapper();
-    const books = JSONdata.map((item: { [key: string]: string }) => bookMapper.map(item));
-    logger.debug("list of books: %o", books);
-    logger.info({ message: "list of books", books });
-    logger.info("finished mapping json data");
+//config body parser
+app.use(bodyParser.json());
+//localhost : 3000/orders?Limit=10.. to capture query parameter we use the encoder
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    const XmlToyData = await parseXml("src/data/toy orders.xml");
-    const toyMapper = new XMLToyMapper();
-    const toys = XmlToyData.data.row.map((row: { [key: string]: string }) => {
-        const flatRow: { [key: string]: string } = {};
-        for (const key in row) {
-            flatRow[key] = row[key][0]; 
-        }
-        return toyMapper.map(flatRow);
+//config cors cross origin resouce sharing: accessible by only some links-> security.
+app.use(cors());
+
+// add middleware for request logging
+app.use(requestLogger);
+
+// config routes
+app.use('/', routes);
+
+//config 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not Found' });
 });
-    logger.debug("list of toys: %o", toys);
-    logger.info({ message: "list of toys", toys });
-    logger.info("Finished mapping XML toys");
 
-}
-    
-main();
+//config error handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if(err instanceof ApiException){
+        const apiException= err as ApiException;
+        logger.error(`API Exception: ${apiException.status} ${apiException.message}`);
+        res.status(apiException.status).json({ error: apiException.message });
+    }else{
+        logger.error(`Unexpected error: ${err.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.listen(config.port, config.host, () => {
+    logger.info(`Server is running on port http://%s:%d`, config.host, config.port);
+});

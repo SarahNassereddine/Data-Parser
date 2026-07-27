@@ -1,7 +1,9 @@
-import { IItem } from "../model/IItem";
-import { OrderBuilder } from "../model/builders/Order.builder";
+import { IdentifiableItem, IItem } from "../model/IItem";
+import { IdentifiableOrderItemBuilder, OrderBuilder } from "../model/builders/Order.builder";
 import { IMapper } from "./IMapper";
-import { IOrder } from "../model/IOrder";
+import { IIdentifiableOrderItem, IOrder } from "../model/IOrder";
+import { IdentifiableOrderItem } from "../model/order.model";
+
 
 export class CSVOrderMapper implements IMapper<string[], IOrder>{
     constructor(private itemMapper:IMapper<string[],IItem>){};
@@ -104,6 +106,43 @@ export class XmlOrderMapper implements IMapper<any, IOrder> {
             item: [this.itemMapper.reverseMap(data.getItem())],
             Quantity: [data.getQuantity().toString()],
             Price: [data.getPrice().toString()]
+        };
+    }
+}
+export interface SQLiteOrder{
+    id: string;
+    quantity: number;
+    price: number;
+    item_category: string;
+    item_id: string;
+}
+
+
+export class SQLiteCSVOrderMapper implements IMapper<{ data: SQLiteOrder; item: IdentifiableItem }, IIdentifiableOrderItem> {
+    map({ data, item }: { data: SQLiteOrder; item: IdentifiableItem }): IIdentifiableOrderItem {
+        const order = OrderBuilder.newBuilder()
+            .setId(data.id)
+            .setQuantity(data.quantity)
+            .setPrice(data.price)
+            .setItem(item)
+            .build();
+
+        return IdentifiableOrderItemBuilder.newBuilder()
+            .setOrder(order)
+            .setItem(item)
+            .build();
+    }
+
+    reverseMap(orderItem: IIdentifiableOrderItem): { data: SQLiteOrder; item: IdentifiableItem } {
+        return {
+            data: {
+                id: orderItem.getId(),
+                quantity: orderItem.getQuantity(),
+                price: orderItem.getPrice(),
+                item_category: orderItem.getItem().getCategory(),
+                item_id: orderItem.getItem().getId()
+            },
+            item: orderItem.getItem()
         };
     }
 }

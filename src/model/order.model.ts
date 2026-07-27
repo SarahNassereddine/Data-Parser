@@ -1,4 +1,6 @@
-import {IItem} from "./item.model"
+import { IdentifiableItem } from "./IItem";
+import {IItem} from "./IItem";
+import { IIdentifiableOrderItem} from "./IOrder";
 export interface IOrder{
     getItem():IItem;
     getPrice(): number;
@@ -24,4 +26,22 @@ export class Order implements IOrder{
     }
 }
 
-           
+export class IdentifiableOrderItem  implements IIdentifiableOrderItem {
+    constructor(private identifiableItem: IdentifiableItem,
+                private price: number,
+                private quantity: number,
+                private id: string) {
+    }
+    getPrice(): number {
+        return this.price;
+    }
+    getQuantity(): number {
+        return this.quantity;
+    }
+    getId(): string {
+        return this.id;
+    }
+    getItem(): IdentifiableItem {
+        return this.identifiableItem;
+    }
+}

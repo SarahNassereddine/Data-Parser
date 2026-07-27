@@ -10,7 +10,7 @@ export async function parseCSV (filePath: string): Promise<string[][]> {
       const fileStream=fs.createReadStream(filePath);
 
       fileStream.on('error', (err) => {
-      reject(err);
+      reject(err); // handles file not found or permission denied.
     });
 
         fileStream.pipe(parse({ skip_empty_lines: true, trim: true}))
@@ -21,7 +21,7 @@ export async function parseCSV (filePath: string): Promise<string[][]> {
           resolve(results);
         })
         .on('error', (error: Error) => {
-          reject(error);
+          reject(error); //handles invalid format.
         });
     });
   }

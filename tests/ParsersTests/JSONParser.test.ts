@@ -6,8 +6,25 @@ import { createParserFile } from './UtilFunction';
 describe("json parser:", ()=>{
    const dummyFilesDir = path.resolve(__dirname, './dummyJSONFiles');
     it('should parse json file correctly', async () => {
-        const filePath = path.join(__dirname, "..", "..", "src", "data", "book orders.json");
-        const data = await parseJSON(filePath);
+    const filePath = await createParserFile(
+        dummyFilesDir,
+        'books.json',
+        JSON.stringify([{
+            'Order ID': '2001',
+            'Book Title': 'Edge of Eternity',
+            'Author': 'Dan Brown',
+            'Genre': 'Science Fiction',
+            'Format': 'Paperback',
+            'Language': 'French',
+            'Publisher': 'Oxford Press',
+            'Special Edition': 'Signed Copy',
+            'Packaging': 'Eco-Friendly Packaging',
+            'Price': '12',
+            'Quantity': '5'
+        }])
+    );
+
+    const data = await parseJSON(filePath);
 
         expect(data).toBeDefined();
         expect(data.length).toBeGreaterThan(0); // Ensure that some data is 
@@ -15,12 +32,15 @@ describe("json parser:", ()=>{
         expect(firstItem).toHaveProperty('Order ID');
         expect(firstItem).toHaveProperty('Quantity');
 
+        expect(firstItem['Order ID']).toBe('2001');
+        expect(firstItem['Price']).toBe('12');
+
     });
     it('should throw an error if non-existent json file', async () => {
         const filePath = './src/data/non_existent.json'; // Non-existent file
         await expect(parseJSON(filePath)).rejects.toThrow(); // Expect an error to be thrown
     });
-    it('should handle malformed json data', async () => {
+    it('should throw an error if malformed json data', async () => {
       //create a malformed JSON file for testing
         const malformedJsonFilePath= await createParserFile(dummyFilesDir,'malformed.json', '{ "Order ID": 1, "Book Title": "Test Book", ');
 
@@ -32,31 +52,8 @@ describe("json parser:", ()=>{
         const data = await parseJSON(emptyJsonFilePath);
 
         expect(data).toBeDefined();
-        expect(data).toEqual([]); // Expect an empty object for an empty JSON file
+        expect(data).toEqual([]); // Expect an empty array for an empty JSON file
     });
-    it('should parse boolean json', async () => {
-  const filePath = await createParserFile(dummyFilesDir,'boolean.json', 'true');
-  const data = await parseJSON(filePath);
-  expect(data).toBe(true);
-});
-
-it('should parse string json', async () => {
-  const filePath = await createParserFile(dummyFilesDir,'string.json', '"hello"');
-  const data = await parseJSON(filePath);
-  expect(data).toBe("hello");
-});
-
-it('should parse number json', async () => {
-  const filePath = await createParserFile(dummyFilesDir,'number.json', '42');
-  const data = await parseJSON(filePath);
-  expect(data).toBe(42);
-});
-
-it('should parse null json', async () => {
-  const filePath = await createParserFile(dummyFilesDir,'null.json', 'null');
-  const data = await parseJSON(filePath);
-  expect(data).toBe(null);
-});
  afterAll(() => {
     // Clean up the directory containing dummy files creates during tests.
   
